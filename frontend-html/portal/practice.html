@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ challenge.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/portal/main.css') }}" />
+  </head>
+  <body>
+    <div class="bg"></div>
+    <header class="top">
+      <div class="brand">
+        <span class="dot"></span>
+        Black Science
+      </div>
+      <nav class="nav">
+        <a href="{{ back_url }}">До курсу</a>
+        <a href="{{ lesson_url }}">Урок</a>
+      </nav>
+    </header>
+
+    <main class="container narrow">
+      <section class="page-head test-head">
+        <div>
+          <h1>{{ challenge.title }}</h1>
+          {% if challenge.brief %}
+            <p class="muted">{{ challenge.brief }}</p>
+          {% endif %}
+        </div>
+        {% if result %}
+          <div class="score-card">
+            <span>{% if result.passed %}Зараховано{% else %}У процесі{% endif %}</span>
+            <strong>{{ result.score }}/{{ result.total }}</strong>
+            <small>{{ result.percent }}%</small>
+          </div>
+        {% endif %}
+      </section>
+
+      <section class="practice-task">
+        <h2>Завдання</h2>
+        <p>{{ challenge.task }}</p>
+        {% if challenge.hint %}
+          <p class="muted">{{ challenge.hint }}</p>
+        {% endif %}
+      </section>
+
+      <form class="practice-form" method="post">
+        <label class="code-editor">
+          <span>{{ challenge.language|upper }}</span>
+          <textarea name="code" spellcheck="false" required>{{ code }}</textarea>
+        </label>
+
+        {% if result %}
+          <div class="check-panel">
+            <h2>Перевірка</h2>
+            <div class="check-list">
+              {% for check in result.checks %}
+                <div class="check-row {% if check.passed %}passed{% else %}failed{% endif %}">
+                  <span>{% if check.passed %}✓{% else %}×{% endif %}</span>
+                  <strong>{{ check.label }}</strong>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="test-actions">
+          <button class="btn primary" type="submit">Перевірити код</button>
+          <a class="btn ghost" href="{{ lesson_url }}">Повернутися до уроку</a>
+        </div>
+      </form>
+    </main>
+  </body>
+</html>

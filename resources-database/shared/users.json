@@ -1,0 +1,22 @@
+{
+  "student1": {
+    "password": "123",
+    "role": "student",
+    "name": "Олексій",
+    "phone": "0991234567",
+    "courses": [
+      "math",
+      "frontend-backend-course"
+    ]
+  },
+  "teacher1": {
+    "password": "456",
+    "role": "teacher",
+    "name": "Олена Петрівна",
+    "phone": "0997654321",
+    "courses": [
+      "math",
+      "frontend-backend-course"
+    ]
+  }
+}

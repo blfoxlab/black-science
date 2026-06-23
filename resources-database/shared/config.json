@@ -1,0 +1,8 @@
+{
+  "secret_key": "change_me",
+  "telegram_token": "8484545039:AAGSivKC1JTnZ9djM5ck5iJ5x1pn2Nw_Ruc",
+  "telegram_admin_id": "-1003776789330",
+  "calendar_url": "http://localhost:5002",
+  "chat_url": "http://localhost:5001",
+  "videochat_url": "http://localhost:5003"
+}

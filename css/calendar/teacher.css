@@ -1,0 +1,133 @@
+/* Teacher Calendar Styles */
+
+.teacher-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.teacher-controls {
+  grid-template-columns: 1fr 1fr 1.3fr;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.4fr;
+  gap: 16px;
+  align-items: end;
+  margin-bottom: 24px;
+}
+
+.control {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.control span {
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.control input,
+.control select {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  font-size: 14px;
+  background: var(--panel-2);
+  color: var(--text);
+}
+
+.control input:focus,
+.control select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(38, 242, 196, 0.15);
+}
+
+.status {
+  padding: 12px 14px;
+  background: var(--panel-2);
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.day-schedule {
+  display: grid;
+  gap: 10px;
+}
+
+.schedule-row {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  font-size: 14px;
+  color: var(--text);
+}
+
+.schedule-row.busy {
+  background: rgba(255, 107, 107, 0.1);
+  color: var(--muted);
+  border-color: rgba(255, 107, 107, 0.2);
+}
+
+.booking-list {
+  display: grid;
+  gap: 10px;
+}
+
+.booking-card {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  font-size: 13px;
+  color: var(--text);
+  transition: all 0.2s ease;
+}
+
+.booking-card:hover {
+  background: var(--panel);
+  border-color: var(--line-light);
+}
+
+.booking-card strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+@media (max-width: 900px) {
+  .teacher-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .teacher-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .controls {
+    grid-template-columns: 1fr;
+  }
+}

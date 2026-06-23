@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Black Science</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/portal/main.css') }}" />
+  </head>
+  <body>
+    <div class="bg"></div>
+    <header class="top">
+      <div class="brand">
+        <span class="dot"></span>
+        Black Science
+      </div>
+      <nav class="nav">
+        <a href="#apply">Заявка</a>
+        <a href="#login">Вхід</a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <section class="hero">
+        <div class="hero-badge">
+          <img src="{{ url_for('static', filename='resources/resources-assets/Icon logo messenger telegram thin - Made in yan.ua.svg') }}" alt="" />
+          <span>Лабораторія точних знань</span>
+        </div>
+        <h1>Black Science</h1>
+        <p>
+          Навчальна лабораторія з математики, біології, хімії та програмування: коротка теорія, багато практики, регулярні тести й робота над помилками.
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#apply">Залишити заявку</a>
+          <a class="btn ghost" href="#login">Увійти</a>
+        </div>
+      </section>
+
+      <section class="intro-panel">
+        <div>
+          <span class="eyebrow">Підхід</span>
+          <h2>Не зубримо терміни й формули, а вчимося бачити логіку науки.</h2>
+        </div>
+        <p>
+          Black Science поєднує точність, експерименти й практику. Учень розбирає задачі, процеси, реакції та код через зрозумілі алгоритми, приклади й короткі перевірки після кожної теми.
+        </p>
+      </section>
+
+      <section class="info-grid">
+        <article class="info-card">
+          <span>01</span>
+          <h3>Діагностика</h3>
+          <p>На старті визначаємо прогалини: логіка розв'язання, терміни, формули, причинно-наслідкові зв'язки або темп роботи.</p>
+        </article>
+        <article class="info-card">
+          <span>02</span>
+          <h3>Система знань</h3>
+          <p>Йдемо від базових понять до складніших моделей: рівнянь, клітинних процесів, хімічних реакцій і програмних структур.</p>
+        </article>
+        <article class="info-card">
+          <span>03</span>
+          <h3>Практика</h3>
+          <p>Після кожного блоку учень проходить короткий тест або практичне завдання, щоб знання не лишались тільки в конспекті.</p>
+        </article>
+      </section>
+
+      <section class="study-strip">
+        <article>
+          <strong>Математика</strong>
+          <span>задачі, формули, графіки</span>
+        </article>
+        <article>
+          <strong>Біологія</strong>
+          <span>системи, процеси, терміни</span>
+        </article>
+        <article>
+          <strong>Хімія</strong>
+          <span>реакції, речовини, розрахунки</span>
+        </article>
+        <article>
+          <strong>Код</strong>
+          <span>логіка, практика, проєкти</span>
+        </article>
+      </section>
+
+      <section class="program-section">
+        <div class="program-copy">
+          <span class="eyebrow">Що всередині</span>
+          <h2>Наука без хаосу: від правил до впевненого застосування.</h2>
+          <p>
+            Учень бачить структуру курсу, переходить між темами, повторює матеріал і здає тести після уроків. Викладач може працювати з прогресом точково: бачити слабкі місця, давати практику й повертати складні теми в потрібний момент.
+          </p>
+        </div>
+        <div class="program-list">
+          <div>
+            <strong>Математика</strong>
+            <span>рівняння, функції, геометрія, ймовірність, задачі у форматі НМТ</span>
+          </div>
+          <div>
+            <strong>Біологія</strong>
+            <span>клітина, генетика, анатомія, екологія, еволюція та робота з термінами</span>
+          </div>
+          <div>
+            <strong>Хімія</strong>
+            <span>будова речовини, реакції, розчини, органіка й розрахункові задачі</span>
+          </div>
+          <div>
+            <strong>Програмування</strong>
+            <span>основи алгоритмів, змінні, умови, цикли, функції та невеликі проєкти</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid">
+        <div class="card" id="apply">
+          <div class="section-icon">
+            <img src="{{ url_for('static', filename='resources/resources-assets/stick/asistent.png') }}" alt="" />
+          </div>
+          <h2>Заявка на навчання</h2>
+          <p class="muted">Ми зв'яжемось з вами протягом дня.</p>
+          <form action="{{ url_for('register') }}" method="post" class="form">
+            <label>
+              <span>Ім'я батьків</span>
+              <input name="parent_name" type="text" required />
+            </label>
+            <label>
+              <span>Ім'я учня</span>
+              <input name="student_name" type="text" required />
+            </label>
+            <label>
+              <span>Телефон</span>
+              <input name="phone" type="tel" required />
+            </label>
+            <label>
+              <span>Предмет</span>
+              <select name="subject" required>
+                <option value="Математика">Математика</option>
+                <option value="Біологія">Біологія</option>
+                <option value="Хімія">Хімія</option>
+                <option value="Програмування">Програмування</option>
+              </select>
+            </label>
+            <button class="btn primary" type="submit">Надіслати</button>
+            {% if register_ok %}
+              <div class="alert ok">Дякуємо! Заявка надіслана в Telegram.</div>
+            {% endif %}
+            {% if register_error %}
+              <div class="alert err">{{ register_error }}</div>
+            {% endif %}
+          </form>
+        </div>
+
+        <div class="card" id="login">
+          <div class="section-icon">
+            <img src="{{ url_for('static', filename='resources/resources-assets/exit.png') }}" alt="" />
+          </div>
+          <h2>Вхід до кабінету</h2>
+          <p class="muted">Окремий доступ для учня та викладача.</p>
+          <form action="{{ url_for('login') }}" method="post" class="form">
+            <label>
+              <span>Логін</span>
+              <input name="username" type="text" required />
+            </label>
+            <label>
+              <span>Пароль</span>
+              <input name="password" type="password" required />
+            </label>
+            <button class="btn accent" type="submit">Увійти</button>
+            {% if login_error %}
+              <div class="alert err">{{ login_error }}</div>
+            {% endif %}
+          </form>
+          <div class="hint">Тестові дані: student1/123, teacher1/456</div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">© 2026 Black Lab</footer>
+  </body>
+</html>

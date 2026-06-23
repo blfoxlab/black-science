@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: foxlab-academy
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn -w 1 --threads 100 --timeout 120 main:app
+    healthCheckPath: /healthz
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true

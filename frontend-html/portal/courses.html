@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Курси - Black Science</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/portal/main.css') }}" />
+  </head>
+  <body>
+    <div class="bg"></div>
+    <header class="top">
+      <div class="brand">
+        <span class="dot"></span>
+        Black Science
+      </div>
+      <nav class="nav">
+        <a href="{{ url_for(dashboard_endpoint) }}">Кабінет</a>
+        <a href="{{ url_for('logout') }}">Вийти</a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <section class="page-head">
+        <h1>Курси Black Science</h1>
+        <p class="muted">Тут показані тільки ті курси, до яких у вас є доступ.</p>
+      </section>
+
+      <section class="course-grid">
+        {% for course in courses %}
+          <a class="course-card" href="{{ url_for('course_detail', course_id=course.id) }}">
+            <div class="course-icon">
+              <img src="{{ url_for('static', filename='resources/resources-assets/Icon ai book line messenger social media - Made in yan.ua.svg') }}" alt="" />
+            </div>
+            <div>
+              <h2>{{ course.title }}</h2>
+              <p>{{ course.lessons_count }} уроків{% if course.has_plan %} · окремий план{% endif %}</p>
+            </div>
+          </a>
+        {% else %}
+          <div class="empty-state">Немає доступних курсів.</div>
+        {% endfor %}
+      </section>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Кабінет учня - Black Science</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/portal/main.css') }}" />
+  </head>
+  <body>
+    <div class="bg"></div>
+    <header class="top">
+      <div class="brand">
+        <span class="dot"></span>
+        Black Science
+      </div>
+      <nav class="nav">
+        <a href="{{ url_for('logout') }}">Вийти</a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <section class="profile-card">
+        <div>
+          <h1>{{ user.name or 'Учень' }}</h1>
+          <p class="muted">Телефон: {{ user.phone or '—' }}</p>
+          <p class="muted">Доступні курси:
+            {% for course in courses %}
+              <span class="mini-chip">{{ course.title }}</span>
+            {% else %}
+              —
+            {% endfor %}
+          </p>
+        </div>
+        <span class="chip">Статус: активний</span>
+      </section>
+
+      <section class="action-grid">
+        <a class="action" href="{{ url_for('courses') }}">
+          <div class="icon">
+            <img src="{{ url_for('static', filename='resources/resources-assets/Icon ai book line messenger social media - Made in yan.ua.svg') }}" alt="" />
+          </div>
+          <div>
+            <strong>Курси</strong>
+            <span>Вибір курсу</span>
+          </div>
+        </a>
+        <a class="action" href="{{ calendar_url }}" target="_blank" rel="noopener">
+          <div class="icon">
+            <img src="{{ url_for('static', filename='resources/resources-assets/Icon book messenger outline rounded social media - Made in yan.ua.svg') }}" alt="" />
+          </div>
+          <div>
+            <strong>Календар</strong>
+            <span>Запис на уроки</span>
+          </div>
+        </a>
+        <a class="action" href="{{ chat_url }}" target="_blank" rel="noopener">
+          <div class="icon">
+            <img src="{{ url_for('static', filename='resources/resources-assets/Icon line messenger textbox - Made in yan.ua.svg') }}" alt="" />
+          </div>
+          <div>
+            <strong>Чат</strong>
+            <span>Фіксований ID</span>
+          </div>
+        </a>
+        <a class="action" href="{{ video_url }}" target="_blank" rel="noopener">
+          <div class="icon">
+            <img src="{{ url_for('static', filename='resources/resources-assets/Icon camcorder line messenger - Made in yan.ua.svg') }}" alt="" />
+          </div>
+          <div>
+            <strong>Відеоурок</strong>
+            <span>Зайти в кімнату</span>
+          </div>
+        </a>
+      </section>
+    </main>
+  </body>
+</html>

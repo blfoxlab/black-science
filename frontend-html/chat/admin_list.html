@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список логів - Black Science</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Manrope:wght@300;400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat/theme.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat/components.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat/style.css') }}">
+    <style>
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        .log-list { display: grid; gap: 12px; list-style: none; }
+        .log-item { background: var(--panel-2); border: 1px solid var(--line); padding: 16px; border-radius: 10px; }
+        .log-item a { color: var(--accent); font-weight: 600; }
+        .log-item a:hover { color: var(--accent-light); }
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="margin-bottom: 24px;">Black Science Logs</h1>
+        {% if pairs %}
+            <ul class="log-list">
+                {% for user_log, admin_log in pairs %}
+                    <li class="log-item">
+                        <div style="margin-bottom: 8px;">
+                            <strong>Користувач:</strong> <a href="/log/{{ user_log }}">{{ user_log }}</a>
+                        </div>
+                        <div>
+                            <strong>Адмін:</strong> <a href="/admin/{{ admin_log }}">{{ admin_log }}</a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="empty-state">
+                <p>Поки що немає збережених логів.</p>
+            </div>
+        {% endif %}
+        <div style="margin-top: 24px;">
+            <a href="/" class="btn btn-accent">Створити новий лог</a>
+        </div>
+    </div>
+</body>
+</html>

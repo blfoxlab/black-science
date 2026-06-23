@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Black Science — Кабінет учня</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Manrope:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #030507;
+      --bg-2: #071013;
+      --panel: #0b1115;
+      --panel-2: #10191d;
+      --accent: #26f2c4;
+      --accent-2: #d7ff4f;
+      --text: #edf7f5;
+      --muted: #8da39f;
+      --line: rgba(114, 255, 222, 0.22);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Manrope", sans-serif;
+      color: var(--text);
+      background: linear-gradient(rgba(114, 255, 222, 0.055) 1px, transparent 1px),
+                  linear-gradient(90deg, rgba(114, 255, 222, 0.045) 1px, transparent 1px),
+                  linear-gradient(160deg, var(--bg) 0%, var(--bg-2) 58%, var(--bg) 100%);
+      background-size: 44px 44px, 44px 44px, 100% 100%;
+    }
+    h1, h2, h3 { font-family: "Space Grotesk", sans-serif; margin: 0; }
+    a { color: inherit; text-decoration: none; }
+    .container {
+      width: min(1100px, 92vw);
+      margin: 0 auto;
+    }
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+      background: rgba(3,5,7,0.78);
+      border-bottom: 1px solid var(--line);
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      gap: 16px;
+    }
+    .brand {
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: 0.5px;
+    }
+    .nav {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .nav a:hover { color: var(--text); }
+    .btn {
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--text);
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-accent {
+      border: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #02100d;
+    }
+    .hero {
+      padding: 90px 0 60px;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 30px;
+      align-items: center;
+    }
+    .hero-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 24px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      padding: 6px 10px;
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .section {
+      padding: 60px 0;
+    }
+    .two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .input, select, textarea {
+      width: 100%;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      color: var(--text);
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    label { font-size: 13px; color: var(--muted); }
+    .muted { color: var(--muted); }
+    .footer {
+      border-top: 1px solid var(--line);
+      padding: 24px 0 40px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--line);
+      font-size: 13px;
+    }
+    .account-menu {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 10px);
+      min-width: 220px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      display: none;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+    }
+    .account-menu.open { display: grid; gap: 8px; }
+    .account-item {
+      width: 100%;
+      text-align: left;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .account-item:hover { border-color: #3b4e6a; }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 100;
+    }
+    .modal.open { display: flex; }
+    .modal-card {
+      width: min(460px, 95vw);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: repeat(2, 1fr); }
+      .two { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .grid { grid-template-columns: 1fr; }
+      .nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <div class="brand">Black Science</div>
+      <nav class="nav">
+        <a href="#home">Головна</a>
+        <a href="#programs">Програми</a>
+        <a href="#cabinet">Кабінет</a>
+        <a href="#apply">Заявка</a>
+      </nav>
+      <div id="auth-area" class="actions">
+        <button id="login-btn" class="btn" onclick="openLogin()">Вхід</button>
+        <div id="account-area" style="position: relative; display: none;">
+          <button id="account-btn" class="btn">Акаунт</button>
+          <div id="account-menu" class="account-menu">
+            <button class="account-item">Курси</button>
+            <button class="account-item">Календар</button>
+            <button class="account-item">Чат</button>
+            <button class="account-item">Дзвінки</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section id="home" class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="badge">Black Science Access</div>
+        <h1 style="font-size: clamp(28px, 5vw, 54px); margin: 18px 0 12px;">Навчайся з власним ключем доступу</h1>
+        <p class="muted" style="font-size: 18px;">Вхід за індивідуальним ключем відкриває курси, календар, чат і дзвінки. Заявки надсилаються прямо на вашу пошту.</p>
+        <div style="margin-top: 20px;" class="actions">
+          <button class="btn btn-accent" onclick="openLogin()">Вхід за ключем</button>
+          <button class="btn" onclick="scrollToSection('apply')">Надіслати заявку</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="programs" class="section">
+    <div class="container">
+      <h2 style="font-size: 32px; margin-bottom: 16px;">Навчальні напрями</h2>
+      <div class="grid">
+        <div class="card">Українська мова</div>
+        <div class="card">Математика</div>
+        <div class="card">Історія</div>
+        <div class="card">Біологія</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cabinet" class="section">
+    <div class="container">
+      <div class="card" style="padding: 22px;">
+        <h2 style="font-size: 30px; margin-bottom: 8px;">Кабінет учня</h2>
+        <p class="muted">Увійдіть за індивідуальним ключем, щоб відкрити особисті інструменти.</p>
+        <div id="cabinet-logged-out" style="margin-top: 16px;" class="actions">
+          <button class="btn btn-accent" onclick="openLogin()">Вхід за ключем</button>
+          <span class="muted">Ключ видається після підтвердження заявки.</span>
+        </div>
+        <div id="cabinet-logged-in" style="display:none; margin-top: 16px;">
+          <div>Вітаємо, <strong id="cabinet-student-name"></strong>!</div>
+          <p class="muted" style="margin-top: 8px;">Меню з курсами, календарем, чатом і дзвінками доступне зверху в «Акаунт».</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="apply" class="section">
+    <div class="container">
+      <div class="two">
+        <div>
+          <h2 style="font-size: 30px; margin-bottom: 10px;">Заявка на навчання</h2>
+          <p class="muted">Заповніть форму, і заявка автоматично прийде вам на пошту.</p>
+        </div>
+        <form id="apply-form" class="card" style="padding: 20px;">
+          <div style="margin-bottom: 12px;">
+            <label>Предмет</label>
+            <select id="subject" class="input">
+              <option value="">Оберіть предмет</option>
+              <option value="ukr">Українська мова</option>
+              <option value="math">Математика</option>
+              <option value="frontend-backend-course">Фронтенд та основи бекенда</option>
+              <option value="hist">Історія</option>
+              <option value="bio">Біологія</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 12px;">
+            <label>Викладач</label>
+            <select id="teacher" class="input">
+              <option value="">Оберіть викладача</option>
+              <option value="Олександр Л.">Олександр Л.</option>
+              <option value="Марія В.">Марія В.</option>
+              <option value="Іван Р.">Іван Р.</option>
+              <option value="Олена С.">Олена С.</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 12px;">
+            <label>ПІБ учня</label>
+            <input id="student-name-input" class="input" type="text" placeholder="Введіть ПІБ" required />
+          </div>
+          <div style="margin-bottom: 12px;">
+            <label>Клас</label>
+            <input id="student-class-input" class="input" type="text" placeholder="Наприклад, 11-А" />
+          </div>
+          <div style="margin-bottom: 12px;">
+            <label>Телефон</label>
+            <input id="phone-input" class="input" type="tel" placeholder="+380..." required />
+          </div>
+          <div style="margin-bottom: 12px;">
+            <label>Повідомлення</label>
+            <textarea id="message-input" class="input" rows="3" placeholder="Ваші побажання..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-accent" style="width: 100%;">Надіслати заявку</button>
+          <p id="apply-status" class="muted" style="margin-top: 10px;"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">© 2026 Black Lab. Всі права захищені.</div>
+  </footer>
+
+  <!-- Login Modal -->
+  <div id="login-modal" class="modal">
+    <div class="modal-card">
+      <h3 style="margin-bottom: 12px;">Вхід учня</h3>
+      <form id="login-form" class="actions" style="flex-direction: column; gap: 12px;">
+        <input id="login-key" class="input" type="text" placeholder="Індивідуальний ключ" required />
+        <button type="submit" class="btn btn-accent">Увійти</button>
+      </form>
+      <button class="btn" style="margin-top: 10px;" onclick="closeLogin()">Закрити</button>
+    </div>
+  </div>
+
+  <script>
+    const LOGIN_STORAGE_KEY = 'foxlab_student_name';
+    const LOGIN_KEY_STORAGE = 'foxlab_student_key';
+
+    function openLogin() {
+      document.getElementById('login-modal').classList.add('open');
+    }
+    function closeLogin() {
+      document.getElementById('login-modal').classList.remove('open');
+    }
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function setLoggedInUI(name) {
+      const loginBtn = document.getElementById('login-btn');
+      const accountArea = document.getElementById('account-area');
+      const accountMenu = document.getElementById('account-menu');
+      const cabinetOut = document.getElementById('cabinet-logged-out');
+      const cabinetIn = document.getElementById('cabinet-logged-in');
+      const cabinetName = document.getElementById('cabinet-student-name');
+
+      if (name) {
+        loginBtn.style.display = 'none';
+        accountArea.style.display = 'inline-block';
+        cabinetOut.style.display = 'none';
+        cabinetIn.style.display = 'block';
+        cabinetName.textContent = name;
+      } else {
+        loginBtn.style.display = 'inline-flex';
+        accountArea.style.display = 'none';
+        accountMenu.classList.remove('open');
+        cabinetOut.style.display = 'flex';
+        cabinetIn.style.display = 'none';
+        cabinetName.textContent = '';
+      }
+    }
+
+    async function loginWithKey(key) {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key })
+      });
+      return res.json();
+    }
+
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const key = document.getElementById('login-key').value.trim();
+      if (!key) return;
+      try {
+        const result = await loginWithKey(key);
+        if (result.ok) {
+          localStorage.setItem(LOGIN_STORAGE_KEY, result.name);
+          localStorage.setItem(LOGIN_KEY_STORAGE, key);
+          setLoggedInUI(result.name);
+          closeLogin();
+        } else {
+          alert('Невірний ключ. Спробуйте ще раз.');
+        }
+      } catch (err) {
+        alert('Сервер недоступний. Запустіть `server.py`.');
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const storedName = localStorage.getItem(LOGIN_STORAGE_KEY);
+      if (storedName) setLoggedInUI(storedName);
+    });
+
+    document.getElementById('account-btn').addEventListener('click', () => {
+      const menu = document.getElementById('account-menu');
+      menu.classList.toggle('open');
+    });
+
+    document.addEventListener('click', (e) => {
+      const accountArea = document.getElementById('account-area');
+      const menu = document.getElementById('account-menu');
+      if (!accountArea.contains(e.target)) {
+        menu.classList.remove('open');
+      }
+    });
+
+    document.getElementById('apply-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const status = document.getElementById('apply-status');
+      status.textContent = 'Надсилаємо заявку...';
+      const payload = {
+        subject: document.getElementById('subject').value || 'Не вказано',
+        teacher: document.getElementById('teacher').value || 'Не вказано',
+        studentName: document.getElementById('student-name-input').value || 'Не вказано',
+        studentClass: document.getElementById('student-class-input').value || 'Не вказано',
+        phone: document.getElementById('phone-input').value || 'Не вказано',
+        message: document.getElementById('message-input').value || '—'
+      };
+
+      try {
+        const res = await fetch('/api/apply', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+        if (result.ok) {
+          status.textContent = 'Заявку надіслано. Ми скоро зв’яжемось!';
+          e.target.reset();
+        } else if (result.error === 'missing_config') {
+          status.textContent = 'Не налаштована пошта. Заповніть `config.json`.';
+        } else if (result.error === 'email_failed') {
+          status.textContent = 'Помилка відправки пошти. Перевірте SMTP-дані.';
+        } else {
+          status.textContent = 'Не вдалося надіслати заявку. Спробуйте пізніше.';
+        }
+      } catch (err) {
+        status.textContent = 'Сервер недоступний. Запустіть `server.py`.';
+      }
+    });
+  </script>
+</body>
+</html>

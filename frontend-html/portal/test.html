@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ test.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/portal/main.css') }}" />
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [["$", "$"], ["\\(", "\\)"]],
+          displayMath: [["$$", "$$"], ["\\[", "\\]"]],
+          processEscapes: true
+        },
+        svg: { fontCache: "global" }
+      };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  </head>
+  <body>
+    <div class="bg"></div>
+    <header class="top">
+      <div class="brand">
+        <span class="dot"></span>
+        Black Science
+      </div>
+      <nav class="nav">
+        <a href="{{ back_url }}">До курсу</a>
+        <a href="{{ lesson_url }}">Урок</a>
+      </nav>
+    </header>
+
+    <main class="container narrow">
+      <section class="page-head test-head">
+        <div>
+          <h1>{{ test.title }}</h1>
+          <p class="muted">{{ test.description }}</p>
+        </div>
+        {% if result %}
+          <div class="score-card">
+            <span>Пройдено</span>
+            <strong>{{ result.score }}/{{ result.total }}</strong>
+            <small>{{ result.percent }}%</small>
+          </div>
+        {% endif %}
+      </section>
+
+      <form class="test-form" method="post">
+        {% for question in test.questions %}
+          {% set question_index = loop.index0 %}
+          {% set answer_state = result.answers[question_index] if result and result.answers else none %}
+          <fieldset class="question-card">
+            <legend>{{ loop.index }}. {{ question.text }}</legend>
+            <div class="option-list">
+              {% for option in question.options %}
+                {% set option_index = loop.index0 %}
+                <label class="option-row {% if answer_state and option_index == answer_state.correct %}correct{% endif %} {% if answer_state and option_index == answer_state.selected and not answer_state.is_correct %}wrong{% endif %}">
+                  <input
+                    type="radio"
+                    name="q{{ question_index }}"
+                    value="{{ option_index }}"
+                    {% if answer_state and option_index == answer_state.selected %}checked{% endif %}
+                    required
+                  />
+                  <span>{{ option }}</span>
+                </label>
+              {% endfor %}
+            </div>
+          </fieldset>
+        {% endfor %}
+
+        <div class="test-actions">
+          <button class="btn primary" type="submit">
+            {% if result %}Перездати тест{% else %}Завершити тест{% endif %}
+          </button>
+          <a class="btn ghost" href="{{ back_url }}">Повернутися до курсу</a>
+        </div>
+      </form>
+    </main>
+  </body>
+</html>

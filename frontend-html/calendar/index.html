@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Календар уроків - Black Science</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Manrope:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/calendar/theme.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/calendar/components.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/calendar/styles.css') }}" />
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="brand"><span class="brand-dot"></span>Black Science Calendar</div>
+      <div class="sub">Оберіть вчителя, дату і час, щоб забронювати заняття</div>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar">
+        <div class="section-title">Вчителі</div>
+        <div id="teachers" class="teachers"></div>
+      </aside>
+
+      <section class="content">
+        <div class="controls">
+          <label class="control">
+            <span>Дата</span>
+            <input id="dateInput" type="date" />
+          </label>
+
+          <label class="control">
+            <span>Тривалість</span>
+            <select id="durationSelect">
+              <option value="30">30 хв</option>
+              <option value="45">45 хв</option>
+              <option value="60" selected>60 хв</option>
+              <option value="90">90 хв</option>
+              <option value="120">120 хв</option>
+            </select>
+          </label>
+
+          <div class="status" id="statusText">Оберіть вчителя</div>
+        </div>
+
+        <div class="calendar">
+          <div class="calendar-header">Доступний час</div>
+          <div id="slots" class="slots"></div>
+        </div>
+
+        <div class="actions">
+          <button id="bookBtn" class="primary" disabled>Забронювати</button>
+          <div id="result" class="result"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="{{ url_for('static', filename='java/calendar/app.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+/* Calendar Styles - Uses theme.css variables */
+
+:root {
+  /* Calendar-specific adjustments */
+  --card-bg: var(--panel);
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--text);
+  background: linear-gradient(rgba(114, 255, 222, 0.055) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(114, 255, 222, 0.045) 1px, transparent 1px),
+              linear-gradient(160deg, var(--bg) 0%, var(--bg-2) 58%, var(--bg) 100%);
+  background-size: 44px 44px, 44px 44px, 100% 100%;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px 60px;
+}
+
+.topbar {
+  padding: 24px 0 32px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 32px;
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--text);
+}
+
+.sub {
+  color: var(--muted);
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 22px;
+}
+
+.sidebar {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.section-title {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  padding: 0 8px;
+  letter-spacing: 0.5px;
+}
+
+.teachers {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.teacher {
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: var(--panel-3);
+  color: var(--text);
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.teacher:hover {
+  transform: translateY(-1px);
+  background: var(--panel);
+  border-color: var(--line-light);
+}
+
+.teacher.active {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #02100d;
+  border-color: var(--accent);
+  font-weight: 700;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.4fr;
+  gap: 16px;
+  align-items: end;
+}
+
+.control {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.control input,
+.control select {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  font-size: 14px;
+  background: var(--panel-2);
+  color: var(--text);
+}
+
+.control input:focus,
+.control select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(38, 242, 196, 0.16);
+}
+
+.status {
+  padding: 12px 14px;
+  background: var(--panel-2);
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.calendar {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.calendar-header {
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+.slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
+}
+
+.slot {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.slot:hover {
+  border-color: var(--accent);
+  background: var(--panel);
+  transform: translateY(-1px);
+}
+
+.slot.busy {
+  opacity: 0.45;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #02100d;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 8px 20px rgba(38, 242, 196, 0.3);
+}
+
+.primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.primary:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(38, 242, 196, 0.4);
+}
+
+.result {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .controls {
+    grid-template-columns: 1fr;
+  }
+}

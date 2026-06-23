@@ -1,0 +1,196 @@
+{
+  "history": {
+    "34e2eecf": [],
+    "d10fe547": [],
+    "c500a7f9": [
+      {
+        "text": "Жаль(",
+        "sender": "user",
+        "time": "17:55"
+      },
+      {
+        "text": "шо жаль",
+        "sender": "admin",
+        "time": "17:55"
+      },
+      {
+        "text": "Він мене обіжає:(",
+        "sender": "user",
+        "time": "17:55"
+      },
+      {
+        "text": "не правда",
+        "sender": "admin",
+        "time": "17:55"
+      },
+      {
+        "text": "Він заставляє мене працювати:(",
+        "sender": "user",
+        "time": "17:55"
+      }
+    ],
+    "cdeb2fa9": [],
+    "6ca2c507": [],
+    "8eb5cf74": [
+      {
+        "text": "пппп",
+        "sender": "user",
+        "time": "12:16"
+      },
+      {
+        "text": "рррррр",
+        "sender": "admin",
+        "time": "12:18"
+      },
+      {
+        "text": "ооооооо",
+        "sender": "user",
+        "time": "12:18"
+      },
+      {
+        "text": "",
+        "sender": "user",
+        "time": "20:54",
+        "files": [],
+        "sticker": "/static/resources/resources-assets/stick/stick_ckall.png"
+      },
+      {
+        "text": "",
+        "sender": "user",
+        "time": "20:54",
+        "files": [
+          {
+            "url": "/static/resources/chat/uploads/b4745236ed9b40a6b2c4f075db2dfe87.sh",
+            "name": "run.sh",
+            "type": "application/x-shellscript",
+            "size": 1646,
+            "is_image": false
+          }
+        ],
+        "sticker": ""
+      },
+      {
+        "text": "",
+        "sender": "user",
+        "time": "21:02",
+        "files": [],
+        "sticker": "/static/resources/resources-assets/stick/asistent.png"
+      },
+      {
+        "text": "",
+        "sender": "user",
+        "time": "21:02",
+        "files": [],
+        "sticker": "/static/resources/resources-assets/stick/stick_stop.png"
+      },
+      {
+        "text": "",
+        "sender": "user",
+        "time": "11:45",
+        "files": [],
+        "sticker": "/static/resources/resources-assets/stick/stick_ckall.png"
+      },
+      {
+        "text": "п",
+        "sender": "admin",
+        "time": "11:46",
+        "files": [],
+        "sticker": ""
+      },
+      {
+        "text": "привіт",
+        "sender": "user",
+        "time": "10:45",
+        "files": [],
+        "sticker": ""
+      },
+      {
+        "text": "привіт",
+        "sender": "admin",
+        "time": "18:37",
+        "files": [],
+        "sticker": ""
+      },
+      {
+        "text": "ти шо",
+        "sender": "admin",
+        "time": "18:37",
+        "files": [],
+        "sticker": ""
+      },
+      {
+        "text": "привіт",
+        "sender": "user",
+        "time": "18:38",
+        "files": [],
+        "sticker": ""
+      },
+      {
+        "text": "",
+        "sender": "admin",
+        "time": "18:37",
+        "files": [],
+        "sticker": "/static/resources/resources-assets/stick/asistent.png"
+      },
+      {
+        "text": "",
+        "sender": "admin",
+        "time": "18:37",
+        "files": [],
+        "sticker": "/static/resources/resources-assets/stick/stick_ckall.png"
+      }
+    ],
+    "87fd47c5": [],
+    "139fc4d2": [],
+    "8c11a0de": [],
+    "c2ad4b38": [],
+    "1076c32e": [],
+    "f1d9bdc9": [],
+    "af6a0609": [],
+    "e41e28b7": [],
+    "a6b86ad4": [],
+    "ab734cff": [],
+    "01e32124": [],
+    "909e38d1": []
+  },
+  "admin_to_user": {
+    "7bb49e9c": "34e2eecf",
+    "d317a17e": "d10fe547",
+    "d21e4866": "c500a7f9",
+    "55214569": "cdeb2fa9",
+    "fbc600ad": "6ca2c507",
+    "f79831aa": "8eb5cf74",
+    "0bb47fe8": "87fd47c5",
+    "480e6700": "139fc4d2",
+    "c69f2ed3": "8c11a0de",
+    "3f8a6832": "c2ad4b38",
+    "1f5a7735": "1076c32e",
+    "b2b06e76": "f1d9bdc9",
+    "3ac11a27": "af6a0609",
+    "09796c88": "e41e28b7",
+    "d824be2d": "a6b86ad4",
+    "662385ce": "ab734cff",
+    "6e92a73c": "01e32124",
+    "1da7d14e": "909e38d1"
+  },
+  "user_to_admin": {
+    "34e2eecf": "7bb49e9c",
+    "d10fe547": "d317a17e",
+    "c500a7f9": "d21e4866",
+    "cdeb2fa9": "55214569",
+    "6ca2c507": "fbc600ad",
+    "8eb5cf74": "f79831aa",
+    "87fd47c5": "0bb47fe8",
+    "139fc4d2": "480e6700",
+    "8c11a0de": "c69f2ed3",
+    "c2ad4b38": "3f8a6832",
+    "1076c32e": "1f5a7735",
+    "f1d9bdc9": "b2b06e76",
+    "af6a0609": "3ac11a27",
+    "e41e28b7": "09796c88",
+    "a6b86ad4": "d824be2d",
+    "ab734cff": "662385ce",
+    "01e32124": "6e92a73c",
+    "909e38d1": "1da7d14e"
+  }
+}

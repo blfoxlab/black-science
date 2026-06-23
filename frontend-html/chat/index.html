@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Чат - Black Science</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Manrope:wght@300;400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat/theme.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat/components.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat/style.css') }}">
+</head>
+<body data-room="{{ log_id }}" data-role="{{ role }}">
+    <div class="chat-container">
+        <main class="chat-window">
+            <header class="chat-header">
+                <div class="chat-header-main">
+                    <div>
+                        <h3>Black Science Chat</h3>
+                        <div class="chat-meta">
+                            <span>Лог: <strong id="log-display">{{ log_id }}</strong></span>
+                            <span class="meta-sep">•</span>
+                            <span>{{ role }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-header-actions">
+                    <div class="header-chip">
+                        <img src="{{ url_for('static', filename='resources/resources-assets/Icon line messenger textbox - Made in yan.ua.svg') }}" alt="" />
+                        <span>Повідомлення</span>
+                    </div>
+                    <div class="header-chip">
+                        <img src="{{ url_for('static', filename='resources/resources-assets/Icon line messenger pic - Made in yan.ua.svg') }}" alt="" />
+                        <span>Файли</span>
+                    </div>
+                    {% if role == 'admin' %}
+                    <a class="admin-link" href="/admin">Усі логи</a>
+                    {% endif %}
+                </div>
+            </header>
+
+            <div class="chat-messages" id="chat-box"></div>
+
+            <footer class="chat-composer">
+                <div id="pending-files" class="pending-files" hidden></div>
+
+                <div class="composer-toolbar">
+                    <button id="attach-btn" class="tool-btn" type="button" title="Прикріпити файл">
+                        <img src="{{ url_for('static', filename='resources/resources-assets/Icon line messenger pic - Made in yan.ua.svg') }}" alt="" />
+                    </button>
+                    <button id="stickers-btn" class="tool-btn" type="button" title="Стікери">
+                        <img src="{{ url_for('static', filename='resources/resources-assets/stick/stick_ai.png') }}" alt="" />
+                    </button>
+                    <div class="toolbar-hint">Можна надіслати текст, файли або стікер</div>
+                    <input id="file-input" type="file" multiple hidden />
+                </div>
+
+                <div id="sticker-panel" class="sticker-panel" hidden aria-hidden="true">
+                    {% for sticker in stickers %}
+                    <button class="sticker-btn" type="button" data-sticker-url="{{ sticker.url }}" data-sticker-name="{{ sticker.name }}">
+                        <img src="{{ sticker.url }}" alt="{{ sticker.name }}" />
+                    </button>
+                    {% endfor %}
+                </div>
+
+                <div class="chat-input-area">
+                    <input type="text" id="msg-input" placeholder="Напишіть щось..." autocomplete="off">
+                    <button id="send-btn" class="send-btn" type="button">
+                        <img src="{{ url_for('static', filename='resources/resources-assets/Icon line messenger phone - Made in yan.ua.svg') }}" alt="" />
+                        <span>Надіслати</span>
+                    </button>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <script id="sticker-data" type="application/json">{{ stickers | tojson }}</script>
+    <script src="{{ url_for('static', filename='java/chat/chat.js') }}"></script>
+</body>
+</html>

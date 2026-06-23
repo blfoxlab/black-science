@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ course.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/portal/main.css') }}" />
+  </head>
+  <body>
+    <div class="bg"></div>
+    <header class="top">
+      <div class="brand">
+        <span class="dot"></span>
+        Black Science
+      </div>
+      <nav class="nav">
+        <a href="{{ url_for('courses') }}">Курси</a>
+        <a href="{{ url_for(dashboard_endpoint) }}">Кабінет</a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <section class="page-head">
+        <h1>{{ course.title }}</h1>
+        <p class="muted">Оберіть урок, пройдіть короткий тест і закріпіть тему практикою з кодом.</p>
+      </section>
+
+      <section class="lesson-list">
+        {% if course.has_plan %}
+          <a class="lesson-row plan-row" href="{{ url_for('course_plan', course_id=course.id) }}">
+            <span class="lesson-number">План</span>
+            <strong>План курсу</strong>
+          </a>
+        {% endif %}
+
+        {% for lesson in lessons %}
+          <div class="lesson-row">
+            <a class="lesson-main" href="{{ url_for('course_lesson', course_id=course.id, lesson_id=lesson.id) }}">
+              <span class="lesson-number">{{ loop.index }}</span>
+              <span class="lesson-copy">
+                <strong>{{ lesson.title }}</strong>
+                {% if lesson.interactive.brief %}
+                  <small>{{ lesson.interactive.brief }}</small>
+                {% endif %}
+              </span>
+            </a>
+            {% if lesson.test.exists or lesson.interactive.challenge_exists %}
+              <div class="lesson-actions">
+                {% if lesson.test.exists %}
+                  <div class="lesson-test">
+                    {% if lesson.test.progress %}
+                      <span class="test-status done">Тест: {{ lesson.test.progress.score }}/{{ lesson.test.progress.total }}</span>
+                    {% else %}
+                      <span class="test-status">Тест</span>
+                    {% endif %}
+                    <a class="btn ghost compact" href="{{ url_for('course_lesson_test', course_id=course.id, lesson_id=lesson.id) }}">Пройти</a>
+                  </div>
+                {% endif %}
+                {% if lesson.interactive.challenge_exists %}
+                  <div class="lesson-test">
+                    {% if lesson.interactive.progress and lesson.interactive.progress.passed %}
+                      <span class="test-status done">Код: {{ lesson.interactive.progress.score }}/{{ lesson.interactive.progress.total }}</span>
+                    {% elif lesson.interactive.progress %}
+                      <span class="test-status">Код: {{ lesson.interactive.progress.score }}/{{ lesson.interactive.progress.total }}</span>
+                    {% else %}
+                      <span class="test-status">Код</span>
+                    {% endif %}
+                    <a class="btn ghost compact" href="{{ url_for('course_lesson_practice', course_id=course.id, lesson_id=lesson.id) }}">Практика</a>
+                  </div>
+                {% endif %}
+              </div>
+            {% endif %}
+          </div>
+        {% else %}
+          <div class="empty-state">У цьому курсі ще немає уроків.</div>
+        {% endfor %}
+      </section>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Відеодзвінки - Black Science</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Manrope:wght@300;400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/css/videochat/theme.css" />
+    <link rel="stylesheet" href="/static/css/videochat/components.css" />
+    <link rel="stylesheet" href="/static/css/videochat/style.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="hero">
+        <h1>Black Science Video</h1>
+        <p>Введи ключ, натисни «Підключитись» і передай той самий ключ співрозмовнику для відеодзвінка.</p>
+      </header>
+
+      <section id="permissionNotice" class="notice" hidden></section>
+
+      <section class="controls">
+        <label class="field">
+          <span>Ключ кімнати</span>
+          <input id="roomKey" type="text" placeholder="Наприклад: team-42" />
+        </label>
+        <div class="buttons">
+          <button id="joinBtn">Підключитись</button>
+          <button id="startLessonBtn" class="secondary" disabled>Розпочати урок</button>
+          <button id="leaveBtn" class="secondary" disabled>Вийти</button>
+        </div>
+        <div class="device-controls">
+          <button id="toggleMicBtn" class="secondary" disabled>Мікрофон: увімкнено</button>
+          <button id="toggleCameraBtn" class="secondary" disabled>Камера: увімкнена</button>
+        </div>
+        <div id="status" class="status">Очікую підключення…</div>
+      </section>
+
+      <section class="videos">
+        <div class="panel local-panel">
+          <h2>Ти</h2>
+          <video id="localVideo" autoplay playsinline muted></video>
+        </div>
+        <div class="panel remote-panel">
+          <h2>Співрозмовник</h2>
+          <video id="remoteVideo" autoplay playsinline></video>
+        </div>
+      </section>
+
+      <section id="lessonBoard" class="lesson-board board-blank" hidden>
+        <canvas id="boardCanvas"></canvas>
+        <canvas id="previewCanvas"></canvas>
+      </section>
+
+      <section id="drawingTools" class="drawing-toolbar" hidden>
+        <button class="icon-btn drawing-tool is-selected" type="button" data-tool="pencil" title="Карандаш" aria-label="Карандаш">
+          <img src="/static/resources/resources-assets/pencil.png" alt="" />
+        </button>
+        <button class="icon-btn drawing-tool" type="button" data-tool="eraser" title="Ластік" aria-label="Ластік">
+          <img src="/static/resources/resources-assets/lastik.png" alt="" />
+        </button>
+        <button class="icon-btn drawing-tool" type="button" data-tool="compass" title="Циркуль" aria-label="Циркуль">
+          <img src="/static/resources/resources-assets/cirkl.png" alt="" />
+        </button>
+        <button class="icon-btn drawing-tool" type="button" data-tool="protractor" title="Транспортир" aria-label="Транспортир">
+          <img src="/static/resources/resources-assets/transportir.png" alt="" />
+        </button>
+        <button class="icon-btn drawing-tool" type="button" data-tool="line" title="Лінія" aria-label="Лінія">
+          <img src="/static/resources/resources-assets/Icon line messenger whiteboard - Made in yan.ua.svg" alt="" />
+        </button>
+        <div class="shape-menu">
+          <button id="shapeMenuBtn" class="icon-btn drawing-tool" type="button" data-tool="shape" title="Фігура" aria-label="Фігура">
+            <img src="/static/resources/resources-assets/image_add.png" alt="" />
+          </button>
+          <div id="shapeMenu" class="tool-menu-panel" hidden>
+            <button type="button" data-shape="rectangle">Прямокутник</button>
+            <button type="button" data-shape="circle">Коло</button>
+            <button type="button" data-shape="triangle">Трикутник</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="boardTools" class="board-toolbar" hidden>
+        <div class="board-menu">
+          <button id="boardMenuBtn" class="icon-btn board-bg-btn" type="button" title="Фон дошки" aria-label="Фон дошки">
+            <img src="/static/resources/resources-assets/background.png" alt="" />
+          </button>
+          <div id="boardMenu" class="board-menu-panel" hidden>
+            <button type="button" data-board-bg="blank">Білий</button>
+            <button type="button" data-board-bg="grid">Клітинка</button>
+            <button type="button" data-board-bg="lines">Лінії</button>
+            <button type="button" data-board-bg="dots">Точки</button>
+            <button type="button" data-board-bg="graph">Координатна</button>
+          </div>
+        </div>
+        <button id="endLessonBtn" class="icon-btn lesson-end-btn" type="button" title="Завершити урок" aria-label="Завершити урок">
+          <img src="/static/resources/resources-assets/lesson.png" alt="" />
+        </button>
+      </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="/static/java/videochat/app.js"></script>
+  </body>
+</html>
