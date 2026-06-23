@@ -1,0 +1,57 @@
+{
+  "id": "11_Формули_зведення",
+  "title": "Тест: Формули зведення",
+  "description": "5 завдань у форматі НМТ. Оберіть одну правильну відповідь у кожному завданні.",
+  "questions": [
+    {
+      "text": "Спростіть \\(\\sin(180^\\circ-\\alpha)\\).",
+      "options": [
+        "\\(\\sin\\alpha\\)",
+        "\\(-\\sin\\alpha\\)",
+        "\\(\\cos\\alpha\\)",
+        "\\(-\\cos\\alpha\\)"
+      ],
+      "answer": 0
+    },
+    {
+      "text": "Спростіть \\(\\cos(180^\\circ-\\alpha)\\).",
+      "options": [
+        "\\(-\\cos\\alpha\\)",
+        "\\(\\cos\\alpha\\)",
+        "\\(\\sin\\alpha\\)",
+        "\\(-\\sin\\alpha\\)"
+      ],
+      "answer": 0
+    },
+    {
+      "text": "Спростіть \\(\\sin(90^\\circ-\\alpha)\\).",
+      "options": [
+        "\\(\\cos\\alpha\\)",
+        "\\(\\sin\\alpha\\)",
+        "\\(-\\cos\\alpha\\)",
+        "\\(-\\sin\\alpha\\)"
+      ],
+      "answer": 0
+    },
+    {
+      "text": "Спростіть \\(\\cos(90^\\circ-\\alpha)\\).",
+      "options": [
+        "\\(\\sin\\alpha\\)",
+        "\\(\\cos\\alpha\\)",
+        "\\(-\\sin\\alpha\\)",
+        "\\(-\\cos\\alpha\\)"
+      ],
+      "answer": 0
+    },
+    {
+      "text": "Обчисліть \\(\\sin 150^\\circ\\).",
+      "options": [
+        "\\(\\frac{1}{2}\\)",
+        "\\(-\\frac{1}{2}\\)",
+        "\\(\\frac{\\sqrt3}{2}\\)",
+        "\\(-\\frac{\\sqrt3}{2}\\)"
+      ],
+      "answer": 0
+    }
+  ]
+}
