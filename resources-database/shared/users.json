@@ -18,5 +18,15 @@
       "math",
       "frontend-backend-course"
     ]
+  },
+  {
+  "Anna": {
+    "password": "2506",
+    "role": "student",
+    "name": "Анна",
+    "phone": "0681234567",
+    "courses": [
+      "math"
+    ]
   }
 }
