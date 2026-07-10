@@ -7,7 +7,7 @@ from pathlib import Path
 from flask import Flask, jsonify, render_template, request
 
 BASE_DIR = Path(__file__).resolve().parent
-PROJECT_ROOT = BASE_DIR.parent.parent
+PROJECT_ROOT = BASE_DIR.parents[1]
 
 app = Flask(
     __name__,
@@ -19,7 +19,7 @@ app = Flask(
 DATA_FILE = PROJECT_ROOT / "resources-database" / "calendar" / "bookings.json"
 LOCK = threading.Lock()
 
-TEACHERS = [
+DEFAULT_TEACHERS = [
     "Олена Іваненко",
     "Максим Петренко",
     "Ірина Шевченко",
@@ -36,6 +36,19 @@ def _load_bookings():
             return json.load(f)
         except json.JSONDecodeError:
             return []
+
+
+def _teacher_names():
+    users_file = PROJECT_ROOT / "resources-database" / "shared" / "users.json"
+    if users_file.exists():
+        try:
+            users = json.loads(users_file.read_text(encoding="utf-8"))
+            teachers = [user.get("name") for user in users.values() if user.get("role") == "teacher" and user.get("name")]
+            if teachers:
+                return sorted(teachers)
+        except json.JSONDecodeError:
+            pass
+    return sorted(DEFAULT_TEACHERS)
 
 
 def _save_bookings(bookings):
@@ -57,7 +70,12 @@ def teacher():
 
 @app.route("/api/teachers")
 def teachers():
-    return jsonify({"teachers": TEACHERS})
+    return jsonify({"teachers": _teacher_names()})
+
+
+@app.route("/calendar/api/teachers")
+def calendar_api_teachers():
+    return jsonify({"teachers": _teacher_names()})
 
 
 @app.route("/api/bookings")
@@ -67,15 +85,31 @@ def bookings():
     return jsonify({"bookings": data})
 
 
+@app.route("/calendar/api/bookings")
+def calendar_api_bookings():
+    with LOCK:
+        data = _load_bookings()
+    return jsonify({"bookings": data})
+
+
 @app.route("/api/book", methods=["POST"])
 def book():
+    return _book_handler()
+
+
+@app.route("/calendar/api/book", methods=["POST"])
+def calendar_book():
+    return _book_handler()
+
+
+def _book_handler():
     payload = request.get_json(force=True)
     teacher = payload.get("teacher")
     date = payload.get("date")  # YYYY-MM-DD
     start_time = payload.get("time")  # HH:MM
     duration_min = int(payload.get("duration", 60))
 
-    if teacher not in TEACHERS:
+    if teacher not in _teacher_names():
         return jsonify({"ok": False, "error": "Невідомий вчитель"}), 400
 
     try:
