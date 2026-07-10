@@ -3,6 +3,10 @@ import uuid
 from pathlib import Path
 
 from flask import Flask, jsonify, render_template, request
+
+import sys
+sys.path.append(str(Path(__file__).resolve().parents[3]))
+from telegram_notifier import send_telegram_notification
 from flask_socketio import SocketIO, emit, join_room
 from werkzeug.utils import secure_filename
 
@@ -238,6 +242,17 @@ def handle_message(data):
     
     # Розсилаємо повідомлення всім у цій кімнаті (вам і користувачу)
     emit('receive_message', msg, room=room)
+
+    sender_role = 'адмін' if data.get('role') == 'admin' else 'користувач'
+    sender_name = data.get('name') or sender_role
+    message_text = text or (f"[Файл: {', '.join(file['name'] for file in files)}]" if files else "[стікер]")
+    notification_text = (
+        f"📨 Нове повідомлення в чаті\n"
+        f"Кімната: {room}\n"
+        f"Від: {sender_name}\n"
+        f"Текст: {message_text}"
+    )
+    send_telegram_notification(notification_text)
 
 if __name__ == '__main__':
     import os
