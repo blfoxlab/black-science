@@ -248,10 +248,34 @@
     <div class="container">
       <h2 style="font-size: 32px; margin-bottom: 16px;">Навчальні напрями</h2>
       <div class="grid">
-        <div class="card">Українська мова</div>
-        <div class="card">Математика</div>
-        <div class="card">Історія</div>
-        <div class="card">Біологія</div>
+        <div class="card">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+            <img src="{{ url_for('static', filename='resources/resources-assets/pen.png') }}" alt="" style="width:28px;height:28px;object-fit:contain;" />
+            <strong>Українська мова</strong>
+          </div>
+          <p class="muted">Працюємо над мовленням, стилем і грамотністю.</p>
+        </div>
+        <div class="card">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+            <img src="{{ url_for('static', filename='resources/resources-assets/transportir.png') }}" alt="" style="width:28px;height:28px;object-fit:contain;" />
+            <strong>Математика</strong>
+          </div>
+          <p class="muted">Розв'язуємо задачі й закріплюємо логіку крок за кроком.</p>
+        </div>
+        <div class="card">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+            <img src="{{ url_for('static', filename='resources/resources-assets/history.png') }}" alt="" style="width:28px;height:28px;object-fit:contain;" />
+            <strong>Історія</strong>
+          </div>
+          <p class="muted">Систематизуємо події, причини й важливі етапи.</p>
+        </div>
+        <div class="card">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+            <img src="{{ url_for('static', filename='resources/resources-assets/biologi.png') }}" alt="" style="width:28px;height:28px;object-fit:contain;" />
+            <strong>Біологія</strong>
+          </div>
+          <p class="muted">Вивчаємо організми, процеси й зв'язки між ними.</p>
+        </div>
       </div>
     </div>
   </section>
