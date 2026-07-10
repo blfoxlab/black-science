@@ -3,6 +3,10 @@ from pathlib import Path
 from typing import Dict, List
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+
+import sys
+sys.path.append(str(Path(__file__).resolve().parents[3]))
+from telegram_notifier import send_telegram_notification
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -59,6 +63,7 @@ async def websocket_endpoint(ws: WebSocket):
     await ws.send_text(json.dumps({"type": "role", "role": role}))
     if len(peers) == 2:
         await _broadcast(room, {"type": "peer-joined"}, sender=ws)
+        send_telegram_notification(f"🎥 Хтось зайшов у відеодзвінок\nКімната: {room}\nСтатус: з'єднання встановлено")
 
     try:
         while True:
