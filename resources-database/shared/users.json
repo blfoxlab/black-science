@@ -1,32 +1,23 @@
 {
-  "student1": {
-    "password": "123",
-    "role": "student",
-    "name": "Олексій",
-    "phone": "0991234567",
-    "courses": [
-      "math",
-      "frontend-backend-course"
-    ]
-  },
-  "teacher1": {
-    "password": "456",
-    "role": "teacher",
-    "name": "Олена Петрівна",
-    "phone": "0997654321",
-    "courses": [
-      "math",
-      "frontend-backend-course"
-    ]
-  },
-  {
-  "Anna": {
-    "password": "2506",
+  "BS-A1": {
+    "password": "0101",
     "role": "student",
     "name": "Анна",
-    "phone": "0681234567",
-    "courses": [
-      "math"
-    ]
+    "phone": "0991234567",
+    "courses": "all"
+  },
+  "BS_O2": {
+    "password": "456",
+    "role": "teacher",
+    "name": "Семенюк Олег",
+    "phone": "0997654321",
+    "courses": "all"
+  },
+  "BS-V3": {
+    "password": "789",
+    "role": "teacher",
+    "name": "Ткачук Влада",
+    "phone": "0998887777",
+    "courses": "all"
   }
 }
