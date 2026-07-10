@@ -1,5 +1,8 @@
 import os
+import urllib.parse
+import urllib.request
 from datetime import datetime, timedelta
+from html import escape
 
 from flask import jsonify, redirect, render_template, request
 from flask_socketio import SocketIO, emit, join_room, leave_room
@@ -33,6 +36,14 @@ portal.config.update(
 
 def _json_response_error(message, status=400):
     return jsonify({"ok": False, "error": message}), status
+
+
+def _send_telegram_notification(text: str) -> bool:
+    try:
+        portal._send_telegram_message(text)
+        return True
+    except Exception:
+        return False
 
 
 @app.route("/portal")
@@ -102,12 +113,9 @@ def entry_api_apply():
 
 
 CALENDAR_DATA_FILE = PROJECT_ROOT / "resources-database" / "calendar" / "bookings.json"
-TEACHERS = [
-    "Олена Іваненко",
-    "Максим Петренко",
-    "Ірина Шевченко",
-    "Андрій Коваленко",
-    "Наталія Бондар",
+DEFAULT_TEACHERS = [
+    "Семенюк Олег",
+    "Ткачук Влада",
 ]
 
 
@@ -117,6 +125,12 @@ def _load_bookings():
 
 def _save_bookings(bookings):
     portal.save_json(CALENDAR_DATA_FILE, bookings)
+
+
+def _teacher_names():
+    users = portal.load_json(portal.USERS_FILE, {})
+    teachers = [user.get("name") for user in users.values() if user.get("role") == "teacher" and user.get("name")]
+    return sorted(teachers) if teachers else sorted(DEFAULT_TEACHERS)
 
 
 @app.route("/calendar")
@@ -131,7 +145,7 @@ def calendar_teacher():
 
 @app.route("/calendar/api/teachers")
 def calendar_teachers():
-    return jsonify({"teachers": TEACHERS})
+    return jsonify({"teachers": DEFAULT_TEACHERS})
 
 
 @app.route("/calendar/api/bookings")
@@ -147,7 +161,7 @@ def calendar_book():
     start_time = payload.get("time")
     duration_min = int(payload.get("duration", 60))
 
-    if teacher not in TEACHERS:
+    if teacher not in DEFAULT_TEACHERS:
         return _json_response_error("Невідомий вчитель")
     if duration_min not in (30, 45, 60, 90, 120):
         return _json_response_error("Некоректна тривалість")
@@ -245,6 +259,15 @@ def chat_message(data):
     chat.save_store()
     emit("receive_message", msg, room=room)
 
+    sender_role = "адмін" if data.get("role") == "admin" else "користувач"
+    sender_name = data.get("name") or sender_role
+    message_text = text or (
+        f"[Файл: {', '.join(file['name'] for file in files)}]" if files else "[стікер]"
+    )
+    _send_telegram_notification(
+        f"📨 Нове повідомлення в чаті\nКімната: {room}\nВід: {sender_name}\nТекст: {message_text}"
+    )
+
 
 video_rooms = {}
 video_sid_rooms = {}
@@ -271,6 +294,9 @@ def video_connect():
 
     role = "offerer" if len(peers) == 2 else "waiter"
     emit("signal", {"type": "role", "role": role}, namespace="/videochat")
+    _send_telegram_notification(
+        f"🎥 У відеодзвінок зайшов новий учасник\nКімната: {room}\nУчасників: {len(peers)}"
+    )
     if len(peers) == 2:
         emit("signal", {"type": "peer-joined"}, to=room, skip_sid=request.sid, namespace="/videochat")
 
