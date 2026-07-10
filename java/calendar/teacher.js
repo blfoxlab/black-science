@@ -104,14 +104,14 @@ function updateStatus() {
 }
 
 async function loadTeachers() {
-  const res = await fetch("api/teachers");
+  const res = await fetch("/calendar/api/teachers");
   const data = await res.json();
   state.teachers = data.teachers || [];
   renderTeacherOptions();
 }
 
 async function loadBookings() {
-  const res = await fetch("api/bookings");
+  const res = await fetch("/calendar/api/bookings");
   const data = await res.json();
   state.bookings = data.bookings || [];
   renderSchedule();
