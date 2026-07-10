@@ -1268,6 +1268,23 @@ def _markdown_to_html(markdown_text: str, render_mode: str = "default") -> Marku
     return Markup("\n".join(html))
 
 
+def _build_chat_url(path: str = "") -> str:
+    base = (config.get("chat_url") or "/chat").strip()
+    if not base:
+        base = "/chat"
+    if "://" in base:
+        parsed = urllib.parse.urlparse(base)
+        base = parsed.path or "/chat"
+    if not base.startswith("/"):
+        base = f"/{base}"
+    base = base.rstrip("/") or "/chat"
+    if not path:
+        return base
+    if path.startswith("/"):
+        return f"{base}{path}"
+    return f"{base}/{path}"
+
+
 @app.route("/student")
 def student_dashboard():
     if not _require_role("student"):
@@ -1282,7 +1299,7 @@ def student_dashboard():
         user=user,
         courses=_user_courses(user),
         calendar_url="/calendar",
-        chat_url=f"{config['chat_url'].rstrip('/')}/log/{room_id}",
+        chat_url=_build_chat_url(f"/log/{room_id}"),
         video_url=config["videochat_url"],
     )
 
@@ -1300,7 +1317,7 @@ def teacher_dashboard():
         user=user,
         courses=_user_courses(user),
         calendar_url=f"{config['calendar_url'].rstrip('/')}/teacher",
-        chat_url=f"{config['chat_url'].rstrip('/')}/admin",
+        chat_url=_build_chat_url("/admin"),
         video_url=config["videochat_url"],
     )
 
