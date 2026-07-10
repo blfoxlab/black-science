@@ -40,7 +40,17 @@ DEFAULT_USERS = {
 
 COURSE_TITLES = {
     "math": "Математика",
+    "hystory": "Історія",
+    "history": "Історія",
+    "pfizik": "Фізика",
     "frontend-backend-course": "Фронтенд та основи бекенда",
+    "prog_intro": "Вступ до програмування",
+    "prog_base": "Базові поняття",
+    "prog_adventure": "Програмування - Пригода",
+    "prog_frontend": "Фронтенд розробка",
+    "prog_nodejs": "Node.js та бекенд",
+    "prog_react": "React",
+    "prog_full": "Full Stack розробка",
 }
 COURSE_ORDER = {
     "math": 1,
@@ -346,13 +356,20 @@ def index():
 
 def _send_telegram_message(text: str) -> None:
     token = config["telegram_token"]
-    admin_id = config["telegram_admin_id"]
-    if not token or not admin_id:
-        raise RuntimeError("Telegram token or admin chat id is not configured")
+    chat_id = (
+        os.getenv("TELEGRAM_CHAT_ID")
+        or os.getenv("TELEGRAM_GROUP_CHAT_ID")
+        or os.getenv("TELEGRAM_ADMIN_ID")
+        or config.get("telegram_chat_id", "")
+        or config.get("telegram_group_chat_id", "")
+        or config.get("telegram_admin_id", "")
+    )
+    if not token or not chat_id:
+        raise RuntimeError("Telegram token or chat id is not configured")
 
     payload = urllib.parse.urlencode(
         {
-            "chat_id": admin_id,
+            "chat_id": chat_id,
             "text": text,
             "parse_mode": "HTML",
         }
@@ -450,25 +467,63 @@ def _available_courses():
         key=lambda p: (COURSE_ORDER.get(p.name, 999), p.name),
     )
     for course_dir in course_dirs:
-        lessons = sorted(p for p in course_dir.glob("*.md") if p.name not in {"plan.md", "README.md"})
-        courses.append(
-            {
+        # Check if this is the prog course with subcourses
+        subcourses = sorted([p for p in course_dir.iterdir() if p.is_dir() and p.name.startswith("prog_")])
+        
+        if course_dir.name == "prog" and subcourses:
+            # For prog course, add subcourses instead
+            subcourse_list = []
+            for subdir in subcourses:
+                lessons = sorted(p for p in subdir.glob("*.md") if p.name not in {"plan.md", "README.md"})
+                subcourse_list.append({
+                    "id": subdir.name,
+                    "title": _course_title(subdir.name),
+                    "lessons_count": len(lessons),
+                    "has_plan": (subdir / "plan.md").exists(),
+                })
+            courses.append({
+                "id": "prog",
+                "title": "Програмування",
+                "subcourses": subcourse_list,
+                "lessons_count": 0,
+                "has_plan": False,
+            })
+        else:
+            # Regular course
+            lessons = sorted(p for p in course_dir.glob("*.md") if p.name not in {"plan.md", "README.md"})
+            courses.append({
                 "id": course_dir.name,
                 "title": _course_title(course_dir.name),
                 "lessons_count": len(lessons),
                 "has_plan": (course_dir / "plan.md").exists(),
-            }
-        )
+            })
     return courses
 
 
 def _user_course_ids(user):
     course_ids = user.get("courses")
     if course_ids == "all":
-        return [course["id"] for course in _available_courses()]
+        all_courses = _available_courses()
+        ids = [course["id"] for course in all_courses]
+        # Add programming subcourses
+        for course in all_courses:
+            if course["id"] == "prog" and "subcourses" in course:
+                ids.extend([sub["id"] for sub in course["subcourses"]])
+        return ids
     if not course_ids:
         return ["math"]
-    return course_ids
+    
+    # Expand prog to include all prog_* subcourses
+    expanded_ids = []
+    for cid in course_ids:
+        expanded_ids.append(cid)
+        if cid == "prog":
+            # Add all prog subcourses
+            prog_dir = COURSES_DIR / "prog"
+            if prog_dir.exists():
+                subcourses = sorted([p for p in prog_dir.iterdir() if p.is_dir() and p.name.startswith("prog_")])
+                expanded_ids.extend([s.name for s in subcourses])
+    return expanded_ids
 
 
 def _user_courses(user):
@@ -488,11 +543,18 @@ def _dashboard_endpoint():
 def _require_course_access(course_id: str):
     if "username" not in session:
         return False
-    return course_id in set(_user_course_ids(_current_user()))
+    allowed_ids = set(_user_course_ids(_current_user()))
+    # Check if course_id or any prog_* subcourse matches
+    return course_id in allowed_ids or any(course_id.startswith("prog_") and "prog" in allowed_ids)
 
 
 def _course_lessons(course_id: str):
-    course_dir = COURSES_DIR / course_id
+    # Handle prog_* subcourses
+    if course_id.startswith("prog_"):
+        course_dir = COURSES_DIR / "prog" / course_id
+    else:
+        course_dir = COURSES_DIR / course_id
+    
     return [
         {
             "id": path.stem,
@@ -502,11 +564,13 @@ def _course_lessons(course_id: str):
             "interactive": _lesson_interactive_summary(course_id, path.stem),
         }
         for path in sorted(course_dir.glob("*.md"))
-        if path.name not in {"plan.md", "README.md"}
+        if path.name not in {"plan.md", "README.md", "план.md"}
     ]
 
 
 def _interactive_path(course_id: str) -> Path:
+    if course_id.startswith("prog_"):
+        return COURSES_DIR / "prog" / course_id / "interactive.json"
     return COURSES_DIR / course_id / "interactive.json"
 
 
@@ -599,6 +663,8 @@ def _check_code_submission(challenge: dict, code: str) -> dict:
 
 
 def _test_path(course_id: str, lesson_id: str) -> Path:
+    if course_id.startswith("prog_"):
+        return COURSES_DIR / "prog" / course_id / "tests" / f"{lesson_id}.json"
     return COURSES_DIR / course_id / "tests" / f"{lesson_id}.json"
 
 
@@ -1051,7 +1117,7 @@ def _render_inline_code(match: re.Match, render_mode: str = "default") -> str:
 def _course_render_mode(course_id: str) -> str:
     if course_id == "math":
         return "math"
-    if course_id == "frontend-backend-course":
+    if course_id == "frontend-backend-course" or course_id.startswith("prog_"):
         return "programming"
     return "default"
 
@@ -1215,7 +1281,7 @@ def student_dashboard():
         "student.html",
         user=user,
         courses=_user_courses(user),
-        calendar_url=config["calendar_url"],
+        calendar_url="/calendar",
         chat_url=f"{config['chat_url'].rstrip('/')}/log/{room_id}",
         video_url=config["videochat_url"],
     )
@@ -1256,10 +1322,11 @@ def courses():
 def course_detail(course_id):
     if not _require_course_access(course_id):
         return redirect(url_for("courses"))
+    course_dir = COURSES_DIR / "prog" / course_id if course_id.startswith("prog_") else COURSES_DIR / course_id
     course = {
         "id": course_id,
         "title": _course_title(course_id),
-        "has_plan": (COURSES_DIR / course_id / "plan.md").exists(),
+        "has_plan": (course_dir / "plan.md").exists(),
     }
     return render_template(
         "course.html",
@@ -1273,7 +1340,8 @@ def course_detail(course_id):
 def course_plan(course_id):
     if not _require_course_access(course_id):
         return redirect(url_for("courses"))
-    plan_path = COURSES_DIR / course_id / "plan.md"
+    course_dir = COURSES_DIR / "prog" / course_id if course_id.startswith("prog_") else COURSES_DIR / course_id
+    plan_path = course_dir / "plan.md"
     if not plan_path.exists():
         return redirect(url_for("course_detail", course_id=course_id))
     text = plan_path.read_text(encoding="utf-8")
@@ -1295,7 +1363,8 @@ def course_lesson(course_id, lesson_id):
     lessons = {lesson["id"] for lesson in _course_lessons(course_id)}
     if lesson_id not in lessons:
         return redirect(url_for("course_detail", course_id=course_id))
-    lesson_path = COURSES_DIR / course_id / f"{lesson_id}.md"
+    course_dir = COURSES_DIR / "prog" / course_id if course_id.startswith("prog_") else COURSES_DIR / course_id
+    lesson_path = course_dir / f"{lesson_id}.md"
     text = lesson_path.read_text(encoding="utf-8")
     return render_template(
         "lesson.html",
