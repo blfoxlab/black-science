@@ -22,7 +22,7 @@
     <main class="container">
       <section class="hero">
         <div class="hero-badge">
-          <img src="{{ url_for('static', filename='resources/resources-assets/Icon logo messenger telegram thin - Made in yan.ua.svg') }}" alt="" />
+          <img src="{{ url_for('static', filename='resources/resources-assets/cristal.png') }}" alt="" />
           <span>Лабораторія точних знань</span>
         </div>
         <h1>Black Science</h1>
@@ -65,18 +65,22 @@
 
       <section class="study-strip">
         <article>
+          <img src="{{ url_for('static', filename='resources/resources-assets/transportir.png') }}" alt="" style="width:24px;height:24px;object-fit:contain;margin-bottom:6px;" />
           <strong>Математика</strong>
           <span>задачі, формули, графіки</span>
         </article>
         <article>
+          <img src="{{ url_for('static', filename='resources/resources-assets/biologi.png') }}" alt="" style="width:24px;height:24px;object-fit:contain;margin-bottom:6px;" />
           <strong>Біологія</strong>
           <span>системи, процеси, терміни</span>
         </article>
         <article>
+          <img src="{{ url_for('static', filename='resources/resources-assets/himich.png') }}" alt="" style="width:24px;height:24px;object-fit:contain;margin-bottom:6px;" />
           <strong>Хімія</strong>
           <span>реакції, речовини, розрахунки</span>
         </article>
         <article>
+          <img src="{{ url_for('static', filename='resources/resources-assets/prog.png') }}" alt="" style="width:24px;height:24px;object-fit:contain;margin-bottom:6px;" />
           <strong>Код</strong>
           <span>логіка, практика, проєкти</span>
         </article>
@@ -113,7 +117,7 @@
       <section class="grid">
         <div class="card" id="apply">
           <div class="section-icon">
-            <img src="{{ url_for('static', filename='resources/resources-assets/stick/asistent.png') }}" alt="" />
+            <img src="{{ url_for('static', filename='resources/resources-assets/reg.png') }}" alt="" />
           </div>
           <h2>Заявка на навчання</h2>
           <p class="muted">Ми зв'яжемось з вами протягом дня.</p>
@@ -136,7 +140,9 @@
                 <option value="Математика">Математика</option>
                 <option value="Біологія">Біологія</option>
                 <option value="Хімія">Хімія</option>
-                <option value="Програмування">Програмування</option>
+                <option value="Історія">Історія</option>
+                <option value="Фізика">Фізика</option>
+                <option value="Українська мова та література">Українська мова та література</option>
               </select>
             </label>
             <button class="btn primary" type="submit">Надіслати</button>
@@ -151,7 +157,7 @@
 
         <div class="card" id="login">
           <div class="section-icon">
-            <img src="{{ url_for('static', filename='resources/resources-assets/exit.png') }}" alt="" />
+            <img src="{{ url_for('static', filename='resources/resources-assets/login.png') }}" alt="" />
           </div>
           <h2>Вхід до кабінету</h2>
           <p class="muted">Окремий доступ для учня та викладача.</p>
@@ -169,7 +175,6 @@
               <div class="alert err">{{ login_error }}</div>
             {% endif %}
           </form>
-          <div class="hint">Тестові дані: student1/123, teacher1/456</div>
         </div>
       </section>
     </main>
