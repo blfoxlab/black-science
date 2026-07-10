@@ -23,14 +23,15 @@
     <div class="container">
         <h1 style="margin-bottom: 24px;">Black Science Logs</h1>
         {% if pairs %}
+            {% set chat_base = '/chat' if request.path.startswith('/chat') else '' %}
             <ul class="log-list">
                 {% for user_log, admin_log in pairs %}
                     <li class="log-item">
                         <div style="margin-bottom: 8px;">
-                            <strong>Користувач:</strong> <a href="/log/{{ user_log }}">{{ user_log }}</a>
+                            <strong>Користувач:</strong> <a href="{{ chat_base }}/log/{{ user_log }}">{{ user_log }}</a>
                         </div>
                         <div>
-                            <strong>Адмін:</strong> <a href="/admin/{{ admin_log }}">{{ admin_log }}</a>
+                            <strong>Адмін:</strong> <a href="{{ chat_base }}/admin/{{ admin_log }}">{{ admin_log }}</a>
                         </div>
                     </li>
                 {% endfor %}
