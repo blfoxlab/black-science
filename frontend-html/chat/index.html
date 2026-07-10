@@ -36,7 +36,8 @@
                         <span>Файли</span>
                     </div>
                     {% if role == 'admin' %}
-                    <a class="admin-link" href="/admin">Усі логи</a>
+                    {% set chat_base = '/chat' if request.path.startswith('/chat') else '' %}
+                    <a class="admin-link" href="{{ chat_base }}/admin">Усі логи</a>
                     {% endif %}
                 </div>
             </header>
