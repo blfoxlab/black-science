@@ -1,5 +1,5 @@
 const state = {
-  teachers: [],
+  teachers: ['Семенюк Олег', 'Ткачук Влада'],
   bookings: [],
   selectedTeacher: null,
   selectedDate: null,
@@ -123,14 +123,14 @@ function updateStatus() {
 }
 
 async function loadTeachers() {
-  const res = await fetch("api/teachers");
+  const res = await fetch("/calendar/api/teachers");
   const data = await res.json();
   state.teachers = data.teachers || [];
   renderTeachers();
 }
 
 async function loadBookings() {
-  const res = await fetch("api/bookings");
+  const res = await fetch("/calendar/api/bookings");
   const data = await res.json();
   state.bookings = data.bookings || [];
   renderSlots();
@@ -145,7 +145,7 @@ async function bookLesson() {
     time: state.selectedTime,
     duration: Number(state.duration),
   };
-  const res = await fetch("api/book", {
+  const res = await fetch("/calendar/api/book", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
