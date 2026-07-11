@@ -19,5 +19,12 @@
     "name": "Ткачук Влада",
     "phone": "0998887777",
     "courses": "all"
+  },
+  "BS-U4": {
+    "password": "0204",
+    "role": "student",
+    "name": "Юстина",
+    "phone": "0991234567",
+    "courses": "all"
   }
 }
