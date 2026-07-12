@@ -26,5 +26,12 @@
     "name": "Юстина",
     "phone": "0991234567",
     "courses": "all"
+  },
+  "BS-E5": {
+    "password": "0304",
+    "role": "student",
+    "name": "Євгеній",
+    "phone": "0991234567",
+    "courses": "all"
   }
 }
