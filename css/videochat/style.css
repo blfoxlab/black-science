@@ -232,6 +232,84 @@ video {
   pointer-events: none;
 }
 
+.board-overlay-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 13;
+  pointer-events: none;
+}
+
+.board-image-item {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(38, 242, 196, 0.7);
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.2);
+  cursor: grab;
+  pointer-events: auto;
+  user-select: none;
+}
+
+.board-image-item.is-selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(38, 242, 196, 0.25), 0 16px 34px rgba(0, 0, 0, 0.2);
+}
+
+.board-image-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.board-image-resize-handle {
+  position: absolute;
+  right: -7px;
+  bottom: -7px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid #fff;
+  cursor: nwse-resize;
+}
+
+.board-share-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #0d1210;
+  border-radius: 12px;
+  pointer-events: none;
+}
+
+.board-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.board-action-btn {
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  box-shadow: none;
+}
+
+.board-action-btn.is-active {
+  background: rgba(38, 242, 196, 0.14);
+  border-color: rgba(38, 242, 196, 0.55);
+  color: #cafff2;
+}
+
 .lesson-board.board-grid {
   background-image:
     linear-gradient(rgba(30, 45, 42, 0.11) 1px, transparent 1px),
