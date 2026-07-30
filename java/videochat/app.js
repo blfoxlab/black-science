@@ -17,6 +17,11 @@ const boardMenuBtn = document.getElementById("boardMenuBtn");
 const boardMenu = document.getElementById("boardMenu");
 const shapeMenuBtn = document.getElementById("shapeMenuBtn");
 const shapeMenu = document.getElementById("shapeMenu");
+const clearBoardBtn = document.getElementById("clearBoardBtn");
+const shareScreenBtn = document.getElementById("shareScreenBtn");
+const insertImageBtn = document.getElementById("insertImageBtn");
+const imageInput = document.getElementById("imageInput");
+const boardOverlayLayer = document.getElementById("boardOverlayLayer");
 const endLessonBtn = document.getElementById("endLessonBtn");
 const boardCtx = boardCanvas.getContext("2d");
 const previewCtx = previewCanvas.getContext("2d");
@@ -35,6 +40,10 @@ let isDrawing = false;
 let lastPoint = null;
 let shapeStart = null;
 let boardActions = [];
+let screenShareStream = null;
+let screenShareActive = false;
+let activeBoardItem = null;
+let boardDragState = null;
 
 function setStatus(text) {
   statusEl.textContent = text;
@@ -256,11 +265,179 @@ function applyBoardAction(action, shouldBroadcast = true) {
   }
 }
 
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
 function setDrawingTool(tool) {
   currentTool = tool;
   document.querySelectorAll(".drawing-tool").forEach((button) => {
     button.classList.toggle("is-selected", button.dataset.tool === currentTool);
   });
+}
+
+function clearBoardContent() {
+  boardActions = [];
+  boardOverlayLayer.innerHTML = "";
+  activeBoardItem = null;
+  boardDragState = null;
+  stopScreenShare(false);
+  redrawBoard();
+  setStatus("Дошка очищена");
+}
+
+function selectBoardItem(item) {
+  boardOverlayLayer.querySelectorAll(".board-image-item").forEach((element) => {
+    element.classList.toggle("is-selected", element === item);
+  });
+  activeBoardItem = item;
+}
+
+function clearBoardSelection() {
+  boardOverlayLayer.querySelectorAll(".board-image-item").forEach((element) => {
+    element.classList.remove("is-selected");
+  });
+  activeBoardItem = null;
+}
+
+function stopScreenShare(shouldUpdateUI = true) {
+  if (screenShareStream) {
+    for (const track of screenShareStream.getTracks()) {
+      track.stop();
+    }
+    screenShareStream = null;
+  }
+  screenShareActive = false;
+  boardOverlayLayer.querySelector(".board-share-video")?.remove();
+  if (shouldUpdateUI) {
+    shareScreenBtn.classList.remove("is-active");
+    shareScreenBtn.textContent = "Екран";
+  }
+}
+
+async function toggleScreenShare() {
+  if (screenShareActive) {
+    stopScreenShare();
+    setStatus("Демонстрацію екрана зупинено");
+    return;
+  }
+
+  if (!navigator.mediaDevices?.getDisplayMedia) {
+    setStatus("Браузер не підтримує демонстрацію екрана");
+    return;
+  }
+
+  try {
+    const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: false });
+    stopScreenShare(false);
+    screenShareStream = stream;
+    screenShareActive = true;
+
+    const video = document.createElement("video");
+    video.className = "board-share-video";
+    video.autoplay = true;
+    video.playsinline = true;
+    video.muted = true;
+    video.srcObject = stream;
+    boardOverlayLayer.appendChild(video);
+
+    shareScreenBtn.classList.add("is-active");
+    shareScreenBtn.textContent = "Зупинити";
+    stream.getVideoTracks()[0]?.addEventListener(
+      "ended",
+      () => {
+        stopScreenShare();
+      },
+      { once: true },
+    );
+    setStatus("Демонстрація екрана активна");
+  } catch (error) {
+    console.warn("Screen share error", error);
+    setStatus("Не вдалося розпочати демонстрацію екрана");
+  }
+}
+
+function addImageToBoard(file) {
+  if (!file || !file.type.startsWith("image/")) return;
+
+  const objectUrl = URL.createObjectURL(file);
+  const img = new Image();
+  img.onload = () => {
+    const overlay = document.createElement("div");
+    overlay.className = "board-image-item";
+
+    const imageEl = document.createElement("img");
+    imageEl.src = objectUrl;
+    imageEl.alt = "Вставлене зображення";
+    overlay.appendChild(imageEl);
+
+    const resizeHandle = document.createElement("div");
+    resizeHandle.className = "board-image-resize-handle";
+    overlay.appendChild(resizeHandle);
+
+    const rect = lessonBoard.getBoundingClientRect();
+    const width = Math.min(280, Math.max(140, rect.width * 0.32));
+    const height = Math.min(220, Math.max(120, width * 0.7));
+    overlay.style.left = `${Math.max(20, (rect.width - width) / 2)}px`;
+    overlay.style.top = `${Math.max(20, (rect.height - height) / 2)}px`;
+    overlay.style.width = `${width}px`;
+    overlay.style.height = `${height}px`;
+
+    boardOverlayLayer.appendChild(overlay);
+    selectBoardItem(overlay);
+    setStatus("Зображення вставлено на дошку");
+  };
+  img.onerror = () => {
+    URL.revokeObjectURL(objectUrl);
+    setStatus("Не вдалося прочитати зображення");
+  };
+  img.src = objectUrl;
+}
+
+function startBoardItemDrag(item, event) {
+  if (!lessonActive) return;
+  selectBoardItem(item);
+  const rect = item.getBoundingClientRect();
+  const boardRect = lessonBoard.getBoundingClientRect();
+  boardDragState = {
+    item,
+    mode: "move",
+    offsetX: event.clientX - rect.left,
+    offsetY: event.clientY - rect.top,
+    boardRect,
+  };
+}
+
+function startBoardItemResize(item, event) {
+  if (!lessonActive) return;
+  selectBoardItem(item);
+  const rect = item.getBoundingClientRect();
+  const boardRect = lessonBoard.getBoundingClientRect();
+  boardDragState = {
+    item,
+    mode: "resize",
+    startWidth: rect.width,
+    startHeight: rect.height,
+    startX: event.clientX,
+    startY: event.clientY,
+    boardRect,
+  };
+}
+
+function handleBoardItemPointerMove(event) {
+  if (!boardDragState) return;
+  const { item, mode, boardRect } = boardDragState;
+  if (mode === "move") {
+    const left = clamp(event.clientX - boardRect.left - boardDragState.offsetX, 0, boardRect.width - item.offsetWidth);
+    const top = clamp(event.clientY - boardRect.top - boardDragState.offsetY, 0, boardRect.height - item.offsetHeight);
+    item.style.left = `${left}px`;
+    item.style.top = `${top}px`;
+  } else {
+    const width = clamp(boardDragState.startWidth + (event.clientX - boardDragState.startX), 80, boardRect.width);
+    const height = clamp(boardDragState.startHeight + (event.clientY - boardDragState.startY), 80, boardRect.height);
+    item.style.width = `${width}px`;
+    item.style.height = `${height}px`;
+  }
 }
 
 function setBoardBackground(name, shouldBroadcast = true) {
@@ -623,6 +800,26 @@ startLessonBtn.addEventListener("click", () => {
   setLessonMode(true);
 });
 
+clearBoardBtn.addEventListener("click", () => {
+  clearBoardContent();
+});
+
+shareScreenBtn.addEventListener("click", () => {
+  toggleScreenShare();
+});
+
+insertImageBtn.addEventListener("click", () => {
+  imageInput.click();
+});
+
+imageInput.addEventListener("change", (event) => {
+  const [file] = event.target.files || [];
+  if (file) {
+    addImageToBoard(file);
+  }
+  event.target.value = "";
+});
+
 endLessonBtn.addEventListener("click", () => {
   setLessonMode(false);
 });
@@ -658,6 +855,29 @@ shapeMenu.addEventListener("click", (event) => {
   currentShape = button.dataset.shape;
   setDrawingTool("shape");
   shapeMenu.hidden = true;
+});
+
+boardOverlayLayer.addEventListener("pointerdown", (event) => {
+  const item = event.target.closest(".board-image-item");
+  if (!item) {
+    clearBoardSelection();
+    return;
+  }
+
+  event.preventDefault();
+  if (event.target.closest(".board-image-resize-handle")) {
+    startBoardItemResize(item, event);
+  } else {
+    startBoardItemDrag(item, event);
+  }
+});
+
+window.addEventListener("pointermove", (event) => {
+  handleBoardItemPointerMove(event);
+});
+
+window.addEventListener("pointerup", () => {
+  boardDragState = null;
 });
 
 boardCanvas.addEventListener("pointerdown", (event) => {
