@@ -51,6 +51,7 @@
       <section id="lessonBoard" class="lesson-board board-blank" hidden>
         <canvas id="boardCanvas"></canvas>
         <canvas id="previewCanvas"></canvas>
+        <div id="boardOverlayLayer" class="board-overlay-layer"></div>
       </section>
 
       <section id="drawingTools" class="drawing-toolbar" hidden>
@@ -94,6 +95,10 @@
             <button type="button" data-board-bg="graph">Координатна</button>
           </div>
         </div>
+        <button id="clearBoardBtn" class="icon-btn board-action-btn" type="button" title="Повна очистка дошки" aria-label="Повна очистка дошки">Очистити</button>
+        <button id="shareScreenBtn" class="icon-btn board-action-btn" type="button" title="Демонстрація екрану" aria-label="Демонстрація екрану">Екран</button>
+        <button id="insertImageBtn" class="icon-btn board-action-btn" type="button" title="Вставити зображення" aria-label="Вставити зображення">Зображення</button>
+        <input id="imageInput" type="file" accept="image/*" hidden />
         <button id="endLessonBtn" class="icon-btn lesson-end-btn" type="button" title="Завершити урок" aria-label="Завершити урок">
           <img src="/static/resources/resources-assets/end.png" alt="" />
         </button>
